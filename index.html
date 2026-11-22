@@ -86,7 +86,9 @@
     if (d.tipo === 'almanzores-pedir-sesion') e.source.postMessage({ tipo: 'almanzores-sesion', token: leer() }, e.origin);
     else if (d.tipo === 'almanzores-guardar-sesion') guardar(typeof d.token === 'string' && d.token.length >= 32 && d.token.length <= 200 ? d.token : null);
   });
-  marco.src = APP_URL;
+  // Alta por enlace: https://filaalmanzores.github.io/?alta=CLAVE abre la pantalla de alta de la app
+  var alta = (location.search.match(/[?&]alta=([A-Za-z0-9]{8,80})(?:&|$)/) || [])[1];
+  marco.src = APP_URL + (alta ? '?alta=' + alta : '');
 </script>
 </body>
 </html>
