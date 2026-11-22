@@ -63,6 +63,29 @@
   document.getElementById('directo').href = APP_URL;
   marco.addEventListener('load', function () { setTimeout(function () { arranque.classList.add('fuera'); }, 400); });
   setTimeout(function () { document.getElementById('ayuda').classList.add('ver'); }, 12000);
+
+  // Sesión: la app (dentro del marco) la guarda aquí porque el iPhone no conserva el almacenamiento del marco.
+  // Solo se responde a la propia app de este marco (un marco descendiente), nunca a otras ventanas.
+  var CLAVE = 'almanzores-sesion';
+  function leer() { try { return localStorage.getItem(CLAVE); } catch (e) { return null; } }
+  function guardar(t) { try { if (t) localStorage.setItem(CLAVE, t); else localStorage.removeItem(CLAVE); } catch (e) { /* sin almacenamiento */ } }
+  function esDeLaApp(w) {
+    var pila = [marco.contentWindow], vistos = 0;
+    while (pila.length && vistos < 50) {
+      var f = pila.pop(); vistos++;
+      if (!f) continue;
+      if (f === w) return true;
+      try { for (var i = 0; i < f.frames.length; i++) pila.push(f.frames[i]); } catch (e) { /* sin acceso */ }
+    }
+    return false;
+  }
+  window.addEventListener('message', function (e) {
+    if (!/^https:\/\/([a-z0-9-]+-script\.googleusercontent\.com|script\.google\.com)$/.test(e.origin)) return;
+    if (!esDeLaApp(e.source)) return;
+    var d = e.data || {};
+    if (d.tipo === 'almanzores-pedir-sesion') e.source.postMessage({ tipo: 'almanzores-sesion', token: leer() }, e.origin);
+    else if (d.tipo === 'almanzores-guardar-sesion') guardar(typeof d.token === 'string' && d.token.length >= 32 && d.token.length <= 200 ? d.token : null);
+  });
   marco.src = APP_URL;
 </script>
 </body>
