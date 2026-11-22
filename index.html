@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<!-- Portada de la app de Tesorería de la Filà Almanzores.
+     Solo da el icono, el nombre y la pantalla completa: la app (y los datos) siguen en Google Apps Script.
+     Esta página no guarda ni recibe ningún dato. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tesorería · Filà Almanzores</title>
+<meta name="description" content="Tesorería de la Filà Almanzores (Petrer).">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tesorería">
+<meta name="application-name" content="Tesorería">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F4EEE3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120F" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icono-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+  :root { --fondo: #F4EEE3; --texto: #2B2622; --suave: #6B6158; --verde: #4E6B4A; color-scheme: light dark; }
+  @media (prefers-color-scheme: dark) { :root { --fondo: #14120F; --texto: #EDE5D6; --suave: #B5AB9B; --verde: #8DB287; } }
+  html, body { margin: 0; height: 100%; background: var(--fondo); color: var(--texto); }
+  body { font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    /* respeta la muesca y la barra de inicio del iPhone en pantalla completa */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    box-sizing: border-box; overflow: hidden; }
+  #app { display: block; width: 100%; height: 100%; border: 0; background: var(--fondo); }
+  #arranque { position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; gap: 18px;
+    background: var(--fondo); text-align: center; padding: 24px; transition: opacity .35s ease; }
+  #arranque.fuera { opacity: 0; pointer-events: none; }
+  #arranque img { width: 132px; height: 132px; border-radius: 50%; box-shadow: 0 10px 30px rgba(0,0,0,.18); }
+  #arranque h1 { margin: 0; font: 600 26px/1.2 Georgia, "Times New Roman", serif; }
+  #arranque p { margin: 0; color: var(--suave); font-size: 14px; }
+  #arranque .puntos span { display: inline-block; width: 7px; height: 7px; margin: 0 3px; border-radius: 50%;
+    background: var(--verde); animation: latido 1.2s infinite ease-in-out; }
+  #arranque .puntos span:nth-child(2) { animation-delay: .15s; } #arranque .puntos span:nth-child(3) { animation-delay: .3s; }
+  @keyframes latido { 0%, 80%, 100% { opacity: .25; transform: scale(.8); } 40% { opacity: 1; transform: scale(1); } }
+  #ayuda { display: none; font-size: 14px; }
+  #ayuda.ver { display: block; }
+  #ayuda a { color: var(--verde); font-weight: 700; }
+  @media (prefers-reduced-motion: reduce) { #arranque, #arranque .puntos span { transition: none; animation: none; } }
+</style>
+</head>
+<body>
+<div id="arranque" role="status" aria-live="polite">
+  <img src="icono-512.png" alt="Sello de Tesorería de la Filà Almanzores">
+  <h1>Tesorería</h1>
+  <p>Filà Almanzores · Petrer</p>
+  <div class="puntos" aria-hidden="true"><span></span><span></span><span></span></div>
+  <p id="ayuda">¿Tarda mucho? <a id="directo" href="#" target="_blank" rel="noopener">Ábrela en el navegador</a></p>
+</div>
+<iframe id="app" title="Tesorería · Filà Almanzores" allow="clipboard-write; camera" referrerpolicy="no-referrer"></iframe>
+<noscript><p style="padding:24px">Para usar la app activa JavaScript o abre directamente <a href="https://script.google.com/macros/s/AKfycbzrk_CxqGjrQtKCd8pdYUzf2Uf0FMrZ_yyi6Q0Ophw1PUJ_Rltv_MuI9FN9sqHKWtpdjg/exec">la app de Tesorería</a>.</p></noscript>
+<script>
+  // Dirección de la app (implementación «v2» de Google Apps Script). Si algún día cambia, se cambia solo aquí.
+  var APP_URL = 'https://script.google.com/macros/s/AKfycbzrk_CxqGjrQtKCd8pdYUzf2Uf0FMrZ_yyi6Q0Ophw1PUJ_Rltv_MuI9FN9sqHKWtpdjg/exec';
+  var marco = document.getElementById('app'), arranque = document.getElementById('arranque');
+  document.getElementById('directo').href = APP_URL;
+  marco.addEventListener('load', function () { setTimeout(function () { arranque.classList.add('fuera'); }, 400); });
+  setTimeout(function () { document.getElementById('ayuda').classList.add('ver'); }, 12000);
+  marco.src = APP_URL;
+</script>
+</body>
+</html>
