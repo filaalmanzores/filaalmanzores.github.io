@@ -54,7 +54,7 @@
   <div class="puntos" aria-hidden="true"><span></span><span></span><span></span></div>
   <p id="ayuda">¿Tarda mucho? <a id="directo" href="#" target="_blank" rel="noopener">Ábrela en el navegador</a></p>
 </div>
-<iframe id="app" title="Tesorería · Filà Almanzores" allow="clipboard-write; camera" referrerpolicy="no-referrer"></iframe>
+<iframe id="app" title="Tesorería · Filà Almanzores" allow="clipboard-write; camera; autoplay" referrerpolicy="no-referrer"></iframe>
 <noscript><p style="padding:24px">Para usar la app activa JavaScript o abre directamente <a href="https://script.google.com/macros/s/AKfycbzrk_CxqGjrQtKCd8pdYUzf2Uf0FMrZ_yyi6Q0Ophw1PUJ_Rltv_MuI9FN9sqHKWtpdjg/exec">la app de Tesorería</a>.</p></noscript>
 <script>
   // Dirección de la app (implementación «v2» de Google Apps Script). Si algún día cambia, se cambia solo aquí.
@@ -87,8 +87,13 @@
     else if (d.tipo === 'almanzores-guardar-sesion') guardar(typeof d.token === 'string' && d.token.length >= 32 && d.token.length <= 200 ? d.token : null);
   });
   // Alta por enlace: https://filaalmanzores.github.io/?alta=CLAVE abre la pantalla de alta de la app
+  // Enlace directo a una pantalla: ?ir=domiciliar abre «Pagos domiciliados» (solo valores conocidos)
   var alta = (location.search.match(/[?&]alta=([A-Za-z0-9]{8,80})(?:&|$)/) || [])[1];
-  marco.src = APP_URL + (alta ? '?alta=' + alta : '');
+  var ir = (location.search.match(/[?&]ir=(domiciliar)(?:&|$)/) || [])[1];
+  var param = [];
+  if (alta) param.push('alta=' + alta);
+  if (ir) param.push('ir=' + ir);
+  marco.src = APP_URL + (param.length ? '?' + param.join('&') : '');
 </script>
 </body>
 </html>
